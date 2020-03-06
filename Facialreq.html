@@ -7,13 +7,12 @@
     <body>
             <script type="text/javascript">
                 function processImage() {
-                    // Replace <Subscription Key> with your valid subscription key.
-                    var subscriptionKey = "<Subscription Key>";
+                  
                 
                     var uriBase =
                         "https://<My Endpoint String>.com/face/v1.0/detect";
                 
-                    // Request parameters.
+                    // indsend parameters.
                     var params = {
                         "returnFaceId": "true",
                         "returnFaceLandmarks": "false",
@@ -26,11 +25,11 @@
                     var sourceImageUrl = document.getElementById("inputImage").value;
                     document.querySelector("#sourceImage").src = sourceImageUrl;
                 
-                    // Perform the REST API call.
+                    // Perform REST API kald.
                     $.ajax({
                         url: uriBase + "?" + $.param(params),
                 
-                        // Request headers.
+                        // headers.
                         beforeSend: function(xhrObj){
                             xhrObj.setRequestHeader("Content-Type","application/json");
                             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
@@ -38,7 +37,7 @@
                 
                         type: "POST",
                 
-                        // Request body.
+                        // body.
                         data: '{"url": ' + '"' + sourceImageUrl + '"}',
                     })
                 
