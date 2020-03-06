@@ -1,79 +1,65 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Detect Faces Sample</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    </head>
-    <body>
-            <script type="text/javascript">
-                function processImage() {
-                  
-                
-                    var uriBase =
-                        "https://<My Endpoint String>.com/face/v1.0/detect";
-                
-                    // indsend parameters.
-                    var params = {
-                        "returnFaceId": "true",
-                        "returnFaceLandmarks": "false",
-                        "returnFaceAttributes":
-                            "age,gender,headPose,smile,facialHair,glasses,emotion," +
-                            "hair,makeup,occlusion,accessories,blur,exposure,noise"
-                    };
-                
-                    // Display the image.
-                    var sourceImageUrl = document.getElementById("inputImage").value;
-                    document.querySelector("#sourceImage").src = sourceImageUrl;
-                
-                    // Perform REST API kald.
-                    $.ajax({
-                        url: uriBase + "?" + $.param(params),
-                
-                        // headers.
-                        beforeSend: function(xhrObj){
-                            xhrObj.setRequestHeader("Content-Type","application/json");
-                            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
-                        },
-                
-                        type: "POST",
-                
-                        // body.
-                        data: '{"url": ' + '"' + sourceImageUrl + '"}',
-                    })
-                
-                    .done(function(data) {
-                        // Show formatted JSON on webpage.
-                        $("#responseTextArea").val(JSON.stringify(data, null, 2));
-                    })
-                
-                    .fail(function(jqXHR, textStatus, errorThrown) {
-                        // Display error message.
-                        var errorString = (errorThrown === "") ?
-                            "Error. " : errorThrown + " (" + jqXHR.status + "): ";
-                        errorString += (jqXHR.responseText === "") ?
-                            "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
-                                jQuery.parseJSON(jqXHR.responseText).message :
-                                    jQuery.parseJSON(jqXHR.responseText).error.message;
-                        alert(errorString);
-                    });
-                };
-            </script>
-    <h1>Detect Faces:</h1>
-Enter the URL to an image that includes a face or faces, then click
-the <strong>Analyze face</strong> button.<br><br>
-Image to analyze: <input type="text" name="inputImage" id="inputImage"
-    value="https://upload.wikimedia.org/wikipedia/commons/c/c3/RH_Louise_Lillian_Gish.jpg" />
-<button onclick="processImage()">Analyze face</button><br><br>
-<div id="wrapper" style="width:1020px; display:table;">
-    <div id="jsonOutput" style="width:600px; display:table-cell;">
-        Response:<br><br>
-        <textarea id="responseTextArea" class="UIInput"
-            style="width:580px; height:400px;"></textarea>
+
+<head>
+    <title>Kendis Genkender</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        function processImage() {
+            var subscriptionKey = "<Subscription Key>";
+            var uriBase =
+                "https://<My Endpoint String>.com/face/v1.0/detect";
+            var params = {
+                "returnFaceId": "true",
+                "returnFaceLandmarks": "false",
+                "returnFaceAttributes":
+                    "age,gender,headPose,smile,facialHair,glasses,emotion," +
+                    "hair,makeup,occlusion,accessories,blur,exposure,noise"
+            };
+            var sourceImageUrl = document.getElementById("inputImage").value;
+            document.querySelector("#sourceImage").src = sourceImageUrl;
+            $.ajax({
+                url: uriBase + "?" + $.param(params),
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Content-Type", "application/json");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+                },
+                type: "POST",
+                data: '{"url": ' + '"' + sourceImageUrl + '"}',
+            })
+                .done(function (data) {
+                    $("#responseTextArea").val(JSON.stringify(data, null, 2));
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    var errorString = (errorThrown === "") ?
+                        "Jeg kan ikke genkende personen. " : errorThrown + " (" + jqXHR.status + "): ";
+                    errorString += (jqXHR.responseText === "") ?
+                        "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+                            jQuery.parseJSON(jqXHR.responseText).message :
+                            jQuery.parseJSON(jqXHR.responseText).error.message;
+                    alert(errorString);
+                });
+        };
+    </script>
+    <h1>Kendis genkender</h1>
+    Indsæt URL'en til billedet af den kendis du ønsker at kende navnet på, og tryk på
+    <strong>Genkend</strong> knappen.<br><br>
+    URL til billedet: <input type="text" name="inputImage" id="inputImage"
+        value="https://upload.wikimedia.org/wikipedia/commons/f/f1/Dwayne_Johnson_2%2C_2013.jpg" />
+    <button onclick="processImage()">Genkend</button><br><br>
+    <div id="wrapper" style="width:1020px; display:table;">
+        <div id="jsonOutput" style="width:600px; display:table-cell;">
+            Svar:<br><br>
+            <textarea id="responseTextArea" class="UIInput" style="width:580px; height:400px;"></textarea>
+        </div>
+        <div id="imageDiv" style="width:420px; display:table-cell;">
+            Billedet du valgte:<br><br>
+            <img id="sourceImage" width="400" />
+        </div>
     </div>
-    <div id="imageDiv" style="width:420px; display:table-cell;">
-        Source image:<br><br>
-        <img id="sourceImage" width="400" />
-    </div>
-</div>
 </body>
+
 </html>
